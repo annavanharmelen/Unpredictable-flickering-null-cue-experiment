@@ -11,13 +11,61 @@ from trial import show_text
 from response import wait_for_key
 
 
-def create_block(n_trials):
-    if n_trials % 6 != 0:
-        raise Exception("Expected number of trials to be divisible by 6.")
+def create_blocks(n_blocks):
+    if n_blocks % 6 != 0:
+        raise Exception("Expected number of blocks to be divisible by 4.")
 
-    trials = (n_trials // 6) * list(
-        zip(2 * ["neutral", "congruent", "incongruent"], 3 * ["left", "right"])
+    # Generate an equal number of blocks of all types
+    block_types = [
+        ("predictable", "early"),
+        ("predictable", "middle"),
+        ("predictable", "late"),
+        ("unpredictable", 0),
+        ("unpredictable", 0),
+        ("unpredictable", 0),
+    ]
+
+    blocks = n_blocks // 6 * block_types
+    random.shuffle(blocks)
+
+    return blocks
+
+
+def create_trials_in_block(n_trials, block_type):
+    if n_trials % 36 != 0:
+        raise Exception("Expected number of trials to be divisible by 36.")
+
+    # Generate equal distribution of target locations
+    locations = 3 * (n_trials // 6 * ["left"] + n_trials // 6 * ["right"])
+
+    # Generate equal distribution of congruencies,
+    # that co-occur equally with the target locations
+    congruencies = 6 * (
+        n_trials // 12 * ["congruent"] + n_trials // 12 * ["incongruent"]
     )
+
+    # Generate equal distribution of flicker types,
+    # that co-occur equally with both target locations and directions
+    flicker_types = 3 * (n_trials // 3 * ["stable", "invisible", "visible"])
+
+    # Generate timing of capture cue onset in each trial depending on block_type
+    if block_type[0] == "predictable":
+        cue_timings = n_trials * [block_type[1]]
+
+    elif block_type[0] == "unpredictable":
+        cue_timings = (
+            n_trials // 3 * ["early"]
+            + n_trials // 3 * ["middle"]
+            + n_trials // 3 * ["late"]
+        )
+
+    else:
+        raise Exception(
+            "Could not understand block_type passed to create_trials_in_block()"
+        )
+
+    # Create trial parameters for all trials
+    trials = list(zip(locations, congruencies, flicker_types, cue_timings))
     random.shuffle(trials)
 
     return trials
