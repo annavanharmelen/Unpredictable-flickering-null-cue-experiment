@@ -34,8 +34,8 @@ COLOURS = [
 ]
 
 
-def generate_stimuli_characteristics(condition, target_bar):
-    neutral_colour, *stimuli_colours = random.sample(COLOURS, 3)
+def generate_stimuli_characteristics(condition, target_bar, flicker_type, cue_timing):
+    stimuli_colours = random.sample(COLOURS, 2)
 
     orientations = [
         random.choice([-1, 1]) * random.randint(5, 85),
@@ -53,11 +53,19 @@ def generate_stimuli_characteristics(condition, target_bar):
         capture_colour = target_colour
     elif condition == "incongruent":
         capture_colour = distractor_colour
-    elif condition == "neutral":
-        capture_colour = neutral_colour
+
+    if cue_timing == "early":
+        cue_delay = 0.5
+    elif cue_timing == "middle":
+        cue_delay = 1.0
+    elif cue_timing == "late":
+        cue_delay = 1.5
 
     return {
+        "ITI": random.randint(500, 800),
         "stimuli_colours": stimuli_colours,
+        "flicker_type": flicker_type,
+        "cue_delay": cue_delay,
         "capture_colour": capture_colour,
         "trial_condition": condition,
         "left_orientation": orientations[0],
@@ -80,6 +88,7 @@ def do_while_showing(waiting_time, something_to_do, window):
 
 
 def single_trial(
+    ITI,
     left_orientation,
     right_orientation,
     target_bar,
@@ -97,7 +106,7 @@ def single_trial(
 
     screens = [
         (0, lambda: 0 / 0, None),  # initial one to make life easier
-        (0.5, lambda: create_fixation_cross(settings), None),
+        (ITI / 1000, lambda: create_fixation_cross(settings), None),
         (
             0.25,
             lambda: create_stimuli_frame(
