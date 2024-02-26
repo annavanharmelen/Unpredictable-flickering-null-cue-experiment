@@ -15,7 +15,14 @@ from trial import single_trial, generate_stimuli_characteristics
 from time import time
 from practice import practice
 import datetime as dt
-from block import create_block, block_break, long_break, finish, quick_finish
+from block import (
+    create_blocks,
+    create_trials_in_block,
+    block_break,
+    long_break,
+    finish,
+    quick_finish,
+)
 
 N_BLOCKS = 24
 TRIALS_PER_BLOCK = 36
