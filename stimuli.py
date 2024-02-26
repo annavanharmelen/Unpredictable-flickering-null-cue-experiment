@@ -9,31 +9,37 @@ made by Anna van Harmelen, 2023
 from psychopy import visual
 
 ECCENTRICITY = 6
-BAR_SIZE = [0.6, 4]  # width, height
-CAPTURE_CUE_SIZE = 0.7  # diameter of circle
+DOT_SIZE = 0.1  # radius of inner circle
+TOTAL_DOT_SIZE = 0.35  # radius of outer circle
+
+decentral_dot = fixation_dot = None
 
 
-def create_fixation_cross(settings, colour="#eaeaea"):
-    # Determine size of fixation cross
-    fixation_size = settings["deg2pix"](0.22)
+def create_fixation_dot(settings, colour="#eaeaea"):
+    global decentral_dot, fixation_dot
 
-    # Make fixation cross
-    fixation_cross = visual.ShapeStim(
-        win=settings["window"],
-        vertices=(
-            (0, -fixation_size),
-            (0, fixation_size),
-            (0, 0),
-            (-fixation_size, 0),
-            (fixation_size, 0),
-        ),
-        lineWidth=settings["deg2pix"](0.06),
-        lineColor=colour,
-        closeShape=False,
-        units="pix",
-    )
+    # Make fixation dot
+    if decentral_dot is None:
+        decentral_dot = visual.Circle(
+            win=settings["window"],
+            units="pix",
+            radius=settings["deg2pix"](TOTAL_DOT_SIZE),
+            pos=(0, 0),
+            fillColor=colour,
+        )
+    decentral_dot.fillColor = colour
 
-    fixation_cross.draw()
+    if fixation_dot is None:
+        fixation_dot = visual.Circle(
+            win=settings["window"],
+            units="pix",
+            radius=settings["deg2pix"](DOT_SIZE),
+            pos=(0, 0),
+            fillColor="#000000",
+        )
+
+    decentral_dot.draw()
+    fixation_dot.draw()
 
 
 def make_one_bar(orientation, colour, position, settings):
