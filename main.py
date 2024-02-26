@@ -11,7 +11,6 @@ import pandas as pd
 from participantinfo import get_participant_details
 from set_up import get_monitor_and_dir, get_settings
 from eyetracker import Eyelinker
-from argparse import ArgumentParser
 from trial import single_trial, generate_stimuli_characteristics
 from time import time
 from practice import practice
