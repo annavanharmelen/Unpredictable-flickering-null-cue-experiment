@@ -28,6 +28,9 @@ def create_blocks(n_blocks):
     blocks = n_blocks // 6 * block_types
     random.shuffle(blocks)
 
+    # Save list of sets of block numbers (in order) + block types
+    blocks = list(zip(range(1, n_blocks + 1), block_types))
+
     return blocks
 
 
