@@ -11,6 +11,8 @@ from psychopy import visual
 ECCENTRICITY = 6
 DOT_SIZE = 0.1  # radius of inner circle
 TOTAL_DOT_SIZE = 0.35  # radius of outer circle
+BAR_SIZE = [0.7, 4]  # width, height
+
 
 decentral_dot = fixation_dot = None
 
