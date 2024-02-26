@@ -28,7 +28,10 @@ import random
 # 6. probecue
 # 7. dials voor respons van proefpersoon
 
-COLOURS = ["#ff99ac", "#f5e2a3", "#a8f0d1", "#99ceff"]
+COLOURS = [[19, 146, 206], [217, 103, 241], [101, 148, 14], [238, 104, 60]]
+COLOURS = [
+    [(rgb_value / 128 - 1) for rgb_value in rgb_triplet] for rgb_triplet in COLOURS
+]
 
 
 def generate_stimuli_characteristics(condition, target_bar):
