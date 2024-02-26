@@ -1,6 +1,6 @@
 """
-Main script for running the 'null-cue gaze bias' experiment
-made by Anna van Harmelen, 2023
+Main script for running the 'unpredictable flickering null-cue experiment'
+made by Anna van Harmelen, 2024
 
 see README.md for instructions if needed
 """

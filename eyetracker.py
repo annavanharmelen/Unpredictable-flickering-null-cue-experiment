@@ -1,7 +1,7 @@
 """
 This file contains the functions necessary for
 connecting and using the eyetracker.
-To run the 'null-cue gaze bias' experiment, see main.py.
+To run the 'unpredictable flickering null-cue experiment', see main.py.
 
 made by Anna van Harmelen, 2023, using code by Rose Nasrawi
 """

@@ -1,9 +1,9 @@
 """
 This file contains the functions necessary for
 practising the trials and the use of the report dial.
-To run the 'null-cue gaze bias' experiment, see main.py.
+To run the 'unpredictable flickering null-cue experiment', see main.py.
 
-made by Anna van Harmelen, 2023
+made by Anna van Harmelen, 2024
 """
 
 from trial import (
