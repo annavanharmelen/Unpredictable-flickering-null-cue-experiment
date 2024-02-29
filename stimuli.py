@@ -76,7 +76,8 @@ def create_stimuli_frame(left_orientation, right_orientation, colours, settings)
 
 
 def create_capture_cue_frame(colour, settings):
-    capture_cue = visual.Circle(
+    create_fixation_dot(settings, colour)
+
         win=settings["window"],
         units="pix",
         radius=settings["deg2pix"](TOTAL_DOT_SIZE / 2),
