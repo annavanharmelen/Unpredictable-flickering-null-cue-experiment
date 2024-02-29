@@ -63,7 +63,7 @@ def generate_stimuli_characteristics(condition, target_bar, flicker_type, cue_ti
         cue_delay = 1.5
 
     return {
-        "ITI": random.randint(500, 800),
+        "ITI": random.randint(500, 800) / 1000,
         "stimuli_colours": stimuli_colours,
         "flicker_type": flicker_type,
         "cue_delay": cue_delay,
@@ -90,6 +90,8 @@ def do_while_showing(waiting_time, something_to_do, window):
 
 def single_trial(
     ITI,
+    flicker_type,
+    cue_delay,
     left_orientation,
     right_orientation,
     target_bar,
@@ -117,7 +119,7 @@ def single_trial(
         ),
         (cue_delay, lambda: create_fixation_dot(settings), None),
         (
-            0.25,
+            0.50,
             lambda: create_capture_cue_frame(capture_colour, settings),
             "capture_cue_onset",
         ),
