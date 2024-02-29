@@ -11,9 +11,8 @@ from trial import (
     generate_stimuli_characteristics,
     show_text,
 )
-from stimuli import make_one_bar, create_fixation_cross
+from stimuli import make_one_bar, create_fixation_dot
 from response import get_response, wait_for_key
-from psychopy import event
 from psychopy.hardware.keyboard import Keyboard
 from time import sleep
 import random
@@ -35,11 +34,7 @@ def practice(testing, settings):
     # Practice dial until user chooses to stop
     try:
         while True:
-            target_bar = random.choice(["left", "right"])
-            condition = "neutral"
-            target = generate_stimuli_characteristics(condition, target_bar)
-            target_orientation = target["target_orientation"]
-            target_colour = None
+            target_orientation = random.choice([-1, 1]) * random.randint(5, 85)
 
             practice_bar = make_one_bar(
                 target_orientation, "#eaeaea", "middle", settings
@@ -47,16 +42,16 @@ def practice(testing, settings):
 
             report: dict = get_response(
                 target_orientation,
-                target_colour,
+                practice_bar.fillColor,
                 settings,
                 testing,
                 None,
                 1,
-                target_bar,
+                "left",
                 [practice_bar],
             )
 
-            create_fixation_cross(settings)
+            create_fixation_dot(settings)
             show_text(
                 f"{report['performance']}",
                 settings["window"],
@@ -78,10 +73,14 @@ def practice(testing, settings):
     # Practice trials until user chooses to stop
     try:
         while True:
-            target_bar = random.choice(["left", "right"])
-            condition = random.choice(["congruent", "incongruent", "neutral"])
+            congruency = random.choice(["congruent", "incongruent"])
+            location = random.choice(["left", "right"])
+            flicker_type = random.choice(["stable", "invisible", "visible"])
+            cue_timing = random.choice(["early", "middle", "late"])
 
-            stimulus = generate_stimuli_characteristics(condition, target_bar)
+            stimulus = generate_stimuli_characteristics(
+                congruency, location, flicker_type, cue_timing
+            )
 
             report: dict = single_trial(**stimulus, settings=settings, testing=True)
 
