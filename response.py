@@ -61,7 +61,7 @@ def evaluate_response(report_orientation, target_orientation, key):
     }
 
 
-def make_circle(rad, settings, pos=(0, 0), handle=False):
+def make_circle(rad, settings, colour="#d4d4d4", pos=(0, 0), handle=False):
     circle = visual.Circle(
         win=settings["window"],
         radius=settings["deg2pix"](rad),
@@ -74,14 +74,14 @@ def make_circle(rad, settings, pos=(0, 0), handle=False):
         circle.lineColor = "#eaeaea"
         circle.fillColor = settings["window"].color
     else:
-        circle.lineColor = "#d4d4d4"
+        circle.lineColor = colour
         circle.fillColor = None
 
     return circle
 
 
-def make_dial(settings):
-    dial_circle = make_circle(RESPONSE_DIAL_SIZE, settings)
+def make_dial(colour, settings):
+    dial_circle = make_circle(RESPONSE_DIAL_SIZE, settings, colour=colour)
     top_dial = make_circle(
         RESPONSE_DIAL_SIZE / 15,
         settings,
@@ -140,7 +140,7 @@ def get_response(
     # - the participant released the rotation key
     # - a second passed
 
-    dial_circle, top_dial, bottom_dial = make_dial(settings)
+    dial_circle, top_dial, bottom_dial = make_dial(target_colour, settings)
 
     if not testing and eyetracker:
         trigger = get_trigger("response_onset", trial_condition, target_bar)
