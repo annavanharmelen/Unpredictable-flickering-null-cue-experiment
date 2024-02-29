@@ -15,6 +15,7 @@ from stimuli import (
     create_fixation_dot,
     create_capture_cue_frame,
     create_stimuli_frame,
+    create_probe_cue,
 )
 from eyetracker import get_trigger
 import random
