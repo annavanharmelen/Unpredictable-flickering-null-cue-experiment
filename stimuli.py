@@ -76,7 +76,23 @@ def create_stimuli_frame(left_orientation, right_orientation, colours, settings)
 
 
 def create_capture_cue_frame(colour, settings):
-    create_fixation_dot(settings, colour)
+    decentral_dot = visual.Circle(
+        win=settings["window"],
+        units="pix",
+        radius=settings["deg2pix"](TOTAL_DOT_SIZE),
+        pos=(0, 0),
+        fillColor=colour,
+    )
+
+    fixation_dot = visual.Circle(
+        win=settings["window"],
+        units="pix",
+        radius=settings["deg2pix"](DOT_SIZE),
+        pos=(0, 0),
+        fillColor="#000000",
+    )
+
+    return decentral_dot, fixation_dot
 
 
 def create_probe_cue(colour, settings):
