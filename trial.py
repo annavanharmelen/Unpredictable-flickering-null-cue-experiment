@@ -118,11 +118,7 @@ def single_trial(
             "stimuli_onset",
         ),
         (cue_delay, lambda: create_fixation_dot(settings), None),
-        (
-            0.50,
-            lambda: create_capture_cue_frame(capture_colour, settings),
-            "capture_cue_onset",
-        ),
+        (0.50, lambda: None, "capture_cue_onset"),
         (2.0 - cue_delay, lambda: create_fixation_dot(settings), None),
         (None, lambda: create_probe_cue(target_colour, settings), None),
     ]
@@ -130,13 +126,54 @@ def single_trial(
     # !!! The timing you pass to do_while_showing is the timing for the previously drawn screen. !!!
 
     for index, (duration, _, frame) in enumerate(screens[:-1]):
-        # Send trigger if not testing
-        if not testing and frame:
-            trigger = get_trigger(frame, trial_condition, target_bar)
-            eyetracker.tracker.send_message(f"trig{trigger}")
+        if not frame == "capture_cue_onset": #and not flicker_type == "stable":
+            # Send trigger if not testing
+            if not testing and frame:
+                trigger = get_trigger(frame, trial_condition, target_bar)
+                eyetracker.tracker.send_message(f"trig{trigger}")
 
-        # Draw the next screen while showing the current one
-        do_while_showing(duration, screens[index + 1][1], settings["window"])
+            # Draw the next screen while showing the current one
+            do_while_showing(duration, screens[index + 1][1], settings["window"])
+
+        else:
+            # Set flicker delay in seconds
+            flicker_delay = {
+                "stable": duration * 0.9,
+                "invisible": 1 / (30 * 2),
+                "visible": 1 / (5 * 2),
+            }[flicker_type]
+            
+            outside, inside = create_capture_cue_frame(capture_colour, settings)
+
+            # Send trigger if not testing
+            if not testing and frame:
+                trigger = get_trigger(frame, trial_condition, target_bar)
+                eyetracker.tracker.send_message(f"trig{trigger}")
+
+            outside.draw()
+            inside.draw()
+            settings["window"].flip()
+
+            counter = 1
+            start = time()
+
+            while (time() - start) < (duration - flicker_delay):
+                loop_start = time()
+
+                if counter % 2 == 0:
+                    outside.opacity = 0.0
+                else:
+                    outside.opacity = 1.0
+
+                outside.draw()
+                inside.draw()
+                settings["window"].flip()
+                counter += 1
+
+                wait(flicker_delay - (time() - loop_start))
+
+            # Quickly draw the next screen
+            screens[index + 1][1]()
 
     # The for loop only draws the probe cue, never shows it
     # So show it here
