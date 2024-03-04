@@ -18,7 +18,7 @@ PROBE_CUE_SIZE = 2  # radius of circle (same as response dial size)
 decentral_dot = fixation_dot = None
 
 
-def create_fixation_dot(settings, colour="#eaeaea"):
+def create_fixation_dot(settings):
     global decentral_dot, fixation_dot
 
     # Make fixation dot
@@ -28,9 +28,8 @@ def create_fixation_dot(settings, colour="#eaeaea"):
             units="pix",
             radius=settings["deg2pix"](TOTAL_DOT_SIZE),
             pos=(0, 0),
-            fillColor=colour,
+            fillColor="#eaeaea",
         )
-    decentral_dot.fillColor = colour
 
     if fixation_dot is None:
         fixation_dot = visual.Circle(
