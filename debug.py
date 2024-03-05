@@ -13,14 +13,21 @@ from trial import generate_stimuli_characteristics, single_trial
 monitor, directory = get_monitor_and_dir(True)
 settings = get_settings(monitor, directory)
 
-stimuli_characteristics: dict = generate_stimuli_characteristics("congruent", "left", "invisible", "middle")
-
-report: dict = single_trial(
-    **stimuli_characteristics,
-    settings=settings,
-    testing=True,
-    eyetracker=None,
+stimuli_characteristics: dict = generate_stimuli_characteristics(
+    "congruent", "left", "invisible", "middle"
 )
+
+try:
+
+    report: dict = single_trial(
+        **stimuli_characteristics,
+        settings=settings,
+        testing=True,
+        eyetracker=None,
+    )
+
+except Exception as e:
+    print(e)
 
 # stop here
 import sys
