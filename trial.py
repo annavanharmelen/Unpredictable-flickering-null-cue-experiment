@@ -104,6 +104,10 @@ def single_trial(
     testing,
     eyetracker=None,
 ):
+    # Create capture cue already, so it doesn't have to made later during the trial
+    outside, inside = create_capture_cue_frame(capture_colour, settings)
+    cue_duration = 0.50
+
     # Initial fixation cross to eliminate jitter caused by for loop
     create_fixation_dot(settings)
 
@@ -118,59 +122,51 @@ def single_trial(
             "stimuli_onset",
         ),
         (cue_delay, lambda: create_fixation_dot(settings), None),
-        (0.50, lambda: None, "capture_cue_onset"),
+        (cue_duration, lambda: (outside.draw(), inside.draw()), "capture_cue_onset"),
         (2.0 - cue_delay, lambda: create_fixation_dot(settings), None),
         (None, lambda: create_probe_cue(target_colour, settings), None),
     ]
 
-    # !!! The timing you pass to do_while_showing is the timing for the previously drawn screen. !!!
+    # Set flicker delay in seconds
+    flicker_delay = {
+        "stable": cue_duration * 0.9,
+        "invisible": 1 / (25 * 2),
+        "visible": 1 / (5 * 2),
+    }[flicker_type]
 
+    # !!! The timing you pass to do_while_showing is the timing for the screen that has already been drawn. !!!
     for index, (duration, _, frame) in enumerate(screens[:-1]):
-        if not frame == "capture_cue_onset": #and not flicker_type == "stable":
-            # Send trigger if not testing
-            if not testing and frame:
-                trigger = get_trigger(frame, trial_condition, target_bar)
-                eyetracker.tracker.send_message(f"trig{trigger}")
 
+        # Send trigger if not testing
+        if not testing and frame:
+            trigger = get_trigger(frame, trial_condition, target_bar)
+            eyetracker.tracker.send_message(f"trig{trigger}")
+
+        if frame != "capture_cue_onset":
             # Draw the next screen while showing the current one
             do_while_showing(duration, screens[index + 1][1], settings["window"])
-
         else:
-            # Set flicker delay in seconds
-            flicker_delay = {
-                "stable": duration * 0.9,
-                "invisible": 1 / (30 * 2),
-                "visible": 1 / (5 * 2),
-            }[flicker_type]
-            
-            outside, inside = create_capture_cue_frame(capture_colour, settings)
+            # Determine opacity
+            opacity = 1.0
 
-            # Send trigger if not testing
-            if not testing and frame:
-                trigger = get_trigger(frame, trial_condition, target_bar)
-                eyetracker.tracker.send_message(f"trig{trigger}")
-
-            outside.draw()
-            inside.draw()
+            # Turn on capture cue
             settings["window"].flip()
 
-            counter = 1
-            start = time()
+            # Time start of capture cue
+            flicker_start = start = time()
 
-            while (time() - start) < (duration - flicker_delay):
-                loop_start = time()
+            while (flicker_start - start) < (duration - flicker_delay):
 
-                if counter % 2 == 0:
-                    outside.opacity = 0.0
-                else:
-                    outside.opacity = 1.0
+                # Switch between opacity values each iteration
+                outside.opacity = opacity = 1 - opacity
 
-                outside.draw()
-                inside.draw()
+                # Draw cue again
+                screens[index][1]()
+
+                # Wait appropriate amount of time and then immediately flip
+                wait(flicker_delay - (time() - flicker_start))
                 settings["window"].flip()
-                counter += 1
-
-                wait(flicker_delay - (time() - loop_start))
+                flicker_start += flicker_delay
 
             # Quickly draw the next screen
             screens[index + 1][1]()
