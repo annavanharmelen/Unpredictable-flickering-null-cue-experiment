@@ -21,7 +21,7 @@ def get_monitor_and_dir(testing: bool):
             "distance": 50,  # in cm
         }
 
-        directory = r"C:\Users\annav\Documents\Jottacloud\Neuroscience\Experiments\vidi1 _ thesis experiment\Data\test"
+        directory = r"..\..\Data\Vidi4 - Unpredictable flickering\test"
 
     else:
         # lab
