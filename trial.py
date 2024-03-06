@@ -130,8 +130,8 @@ def single_trial(
     # Set flicker delay in seconds
     flicker_delay = {
         "stable": cue_duration * 0.9,
-        "invisible": 1 / (25 * 2),
-        "visible": 1 / (5 * 2),
+        "invisible": 1 / (6 * 2),
+        "visible": 1 / (3 * 2),
     }[flicker_type]
 
     # !!! The timing you pass to do_while_showing is the timing for the screen that has already been drawn. !!!
