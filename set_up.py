@@ -32,7 +32,7 @@ def get_monitor_and_dir(testing: bool):
             "distance": 70,  # in cm
         }
 
-        directory = r"C:\Users\Anna_vidi\Desktop\data"
+        directory = r"C:\Users\Anna_vidi\Desktop\Unpredictable-flickering-null-cue data"
 
     return monitor, directory
 
