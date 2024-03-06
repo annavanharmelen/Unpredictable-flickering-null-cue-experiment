@@ -62,8 +62,8 @@ def practice(testing, settings):
 
     except KeyboardInterrupt:
         show_text(
-            "You decided to stop practising the response dial."
-            "Press SPACE to start practicing full trials."
+            "You decided to stop practising the response dial. "
+            "Press SPACE to start practising full trials."
             "\nRemember to press Q to stop practising these trials once you feel comfortable starting the real experiment.",
             settings["window"],
         )
@@ -86,7 +86,7 @@ def practice(testing, settings):
 
     except KeyboardInterrupt:
         show_text(
-            f"You decided to stop practicing the trials.\nPress SPACE to start the experiment.",
+            f"You decided to stop practising the trials.\nPress SPACE to start the experiment.",
             settings["window"],
         )
         settings["window"].flip()
