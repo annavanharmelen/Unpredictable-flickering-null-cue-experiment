@@ -154,11 +154,18 @@ def single_trial(
 
             # Time start of capture cue
             flicker_start = start = time()
+            counter = 1
 
             while (flicker_start - start) < (duration - flicker_delay):
 
                 # Switch between opacity values each iteration
-                outside.opacity = opacity = 1 - opacity
+                # outside.opacity = opacity = 1 - opacity
+                if counter % 2:
+                    outside.fillColor = "#eaeaea"
+                else:
+                    outside.fillColor = capture_colour
+                
+                counter += 1
 
                 # Draw cue again
                 screens[index][1]()
