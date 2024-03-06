@@ -106,7 +106,7 @@ def single_trial(
 ):
     # Create capture cue already, so it doesn't have to made later during the trial
     outside, inside = create_capture_cue_frame(capture_colour, settings)
-    cue_duration = 0.50
+    cue_duration = 1.00
 
     # Initial fixation cross to eliminate jitter caused by for loop
     create_fixation_dot(settings)
