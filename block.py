@@ -49,7 +49,7 @@ def create_trials_in_block(n_trials, block_type):
 
     # Generate equal distribution of flicker types,
     # that co-occur equally with both target locations and directions
-    flicker_types = 3 * (n_trials // 3 * ["stable", "invisible", "visible"])
+    flicker_types = 3 * (n_trials // 3 * ["stable", "high_freq", "low_freq"])
 
     # Generate timing of capture cue onset in each trial depending on block_type
     if block_type[0] == "predictable":

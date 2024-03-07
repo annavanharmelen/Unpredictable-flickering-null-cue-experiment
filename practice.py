@@ -75,7 +75,7 @@ def practice(testing, settings):
         while True:
             congruency = random.choice(["congruent", "incongruent"])
             location = random.choice(["left", "right"])
-            flicker_type = random.choice(["stable", "invisible", "visible"])
+            flicker_type = random.choice(["stable", "high_freq", "low_freq"])
             cue_timing = random.choice(["early", "middle", "late"])
 
             stimulus = generate_stimuli_characteristics(
