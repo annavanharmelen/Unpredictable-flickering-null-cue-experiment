@@ -104,9 +104,13 @@ def single_trial(
     testing,
     eyetracker=None,
 ):
-    # Create capture cue already, so it doesn't have to made later during the trial
-    outside, inside = create_capture_cue_frame(capture_colour, settings)
+    # Set parameters
+    colour_list = [capture_colour, "#eaeaea"]
+    cue_colour = colour_list[0]
     cue_duration = 1.00
+
+    # Create capture cue already, so it doesn't have to made later during the trial
+    outside, inside = create_capture_cue_frame(cue_colour, settings)
 
     # Initial fixation cross to eliminate jitter caused by for loop
     create_fixation_dot(settings)
@@ -146,26 +150,19 @@ def single_trial(
             # Draw the next screen while showing the current one
             do_while_showing(duration, screens[index + 1][1], settings["window"])
         else:
-            # Determine opacity
-            opacity = 1.0
 
             # Turn on capture cue
             settings["window"].flip()
 
             # Time start of capture cue
             flicker_start = start = time()
-            counter = 1
 
             while (flicker_start - start) < (duration - flicker_delay):
 
-                # Switch between opacity values each iteration
-                # outside.opacity = opacity = 1 - opacity
-                if counter % 2:
-                    outside.fillColor = "#eaeaea"
-                else:
-                    outside.fillColor = capture_colour
-                
-                counter += 1
+                # Switch between fill colours each iteration
+                outside.fillColor = cue_colour = colour_list[
+                    1 - colour_list.index(cue_colour)
+                ]
 
                 # Draw cue again
                 screens[index][1]()
