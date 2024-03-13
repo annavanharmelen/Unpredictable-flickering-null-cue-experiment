@@ -14,8 +14,8 @@ monitor, directory = get_monitor_and_dir(True)
 settings = get_settings(monitor, directory)
 
 stimuli_characteristics: dict = generate_stimuli_characteristics(
-    "congruent", "left", "high_freq", "middle"
-)
+        "congruent", "left", "high_freq", "middle", "unpredictable"
+    )
 
 try:
 
