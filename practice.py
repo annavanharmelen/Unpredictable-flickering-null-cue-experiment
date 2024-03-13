@@ -47,7 +47,10 @@ def practice(testing, settings):
                 testing,
                 None,
                 1,
-                "left",
+                1,
+                1,
+                1,
+                1,
                 [practice_bar],
             )
 
@@ -79,7 +82,7 @@ def practice(testing, settings):
             cue_timing = random.choice(["early", "middle", "late"])
 
             stimulus = generate_stimuli_characteristics(
-                congruency, location, flicker_type, cue_timing
+                congruency, location, flicker_type, cue_timing, "unpredictable"
             )
 
             report: dict = single_trial(**stimulus, settings=settings, testing=True)
