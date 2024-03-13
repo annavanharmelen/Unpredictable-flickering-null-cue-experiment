@@ -35,7 +35,9 @@ COLOURS = [
 ]
 
 
-def generate_stimuli_characteristics(condition, target_bar, flicker_type, cue_timing):
+def generate_stimuli_characteristics(
+    condition, target_bar, flicker_type, cue_timing, predictability
+):
     stimuli_colours = random.sample(COLOURS, 2)
 
     orientations = [
@@ -63,10 +65,12 @@ def generate_stimuli_characteristics(condition, target_bar, flicker_type, cue_ti
         cue_delay = 1.5
 
     return {
+        "predictability": predictability,
         "ITI": random.randint(500, 800) / 1000,
         "stimuli_colours": stimuli_colours,
         "flicker_type": flicker_type,
         "cue_delay": cue_delay,
+        "cue_timing": cue_timing,
         "capture_colour": capture_colour,
         "trial_condition": condition,
         "left_orientation": orientations[0],
@@ -89,9 +93,11 @@ def do_while_showing(waiting_time, something_to_do, window):
 
 
 def single_trial(
+    predictability,
     ITI,
     flicker_type,
     cue_delay,
+    cue_timing,
     left_orientation,
     right_orientation,
     target_bar,
@@ -143,7 +149,14 @@ def single_trial(
 
         # Send trigger if not testing
         if not testing and frame:
-            trigger = get_trigger(frame, trial_condition, target_bar)
+            trigger = get_trigger(
+                frame,
+                predictability,
+                cue_timing,
+                trial_condition,
+                flicker_type,
+                target_bar,
+            )
             eyetracker.tracker.send_message(f"trig{trigger}")
 
         if frame != "capture_cue_onset":
@@ -178,7 +191,14 @@ def single_trial(
     # The for loop only draws the probe cue, never shows it
     # So show it here
     if not testing:
-        trigger = get_trigger("probe_cue_onset", trial_condition, target_bar)
+        trigger = get_trigger(
+            "probe_cue_onset",
+            predictability,
+            cue_timing,
+            trial_condition,
+            flicker_type,
+            target_bar,
+        )
         eyetracker.tracker.send_message(f"trig{trigger}")
 
     settings["window"].flip()
@@ -189,12 +209,22 @@ def single_trial(
         settings,
         testing,
         eyetracker,
+        predictability,
+        cue_timing,
         trial_condition,
+        flicker_type,
         target_bar,
     )
 
     if not testing:
-        trigger = get_trigger("response_offset", trial_condition, target_bar)
+        trigger = get_trigger(
+            "response_offset",
+            predictability,
+            cue_timing,
+            trial_condition,
+            flicker_type,
+            target_bar,
+        )
         eyetracker.tracker.send_message(f"trig{trigger}")
 
     # Show performance
@@ -204,14 +234,28 @@ def single_trial(
     )
 
     if not testing:
-        trigger = get_trigger("feedback_onset", trial_condition, target_bar)
+        trigger = get_trigger(
+            "feedback_onset",
+            predictability,
+            cue_timing,
+            trial_condition,
+            flicker_type,
+            target_bar,
+        )
         eyetracker.tracker.send_message(f"trig{trigger}")
     settings["window"].flip()
     sleep(0.25)
 
     return {
-        "condition_code": get_trigger("stimuli_onset", trial_condition, target_bar),
-        **response,
+        "condition_code": get_trigger(
+            "just_code_please",
+            predictability,
+            cue_timing,
+            trial_condition,
+            flicker_type,
+            target_bar,
+        ),
+        ** response,
     }
 
 
