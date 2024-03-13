@@ -99,7 +99,7 @@ def main():
                 start_time = time()
 
                 stimuli_characteristics: dict = generate_stimuli_characteristics(
-                    congruency, location, flicker_type, cue_timing
+                    congruency, location, flicker_type, cue_timing, block_type[0]
                 )
 
                 # Generate trial
