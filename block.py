@@ -13,7 +13,7 @@ from response import wait_for_key
 
 def create_blocks(n_blocks):
     if n_blocks % 6 != 0:
-        raise Exception("Expected number of blocks to be divisible by 4.")
+        raise Exception("Expected number of blocks to be divisible by 6.")
 
     # Generate an equal number of blocks of all types
     block_types = [
@@ -25,11 +25,12 @@ def create_blocks(n_blocks):
         ("unpredictable", 0),
     ]
 
-    blocks = n_blocks // 6 * block_types
+    blocks = (n_blocks // 6) * block_types
+    
     random.shuffle(blocks)
 
     # Save list of sets of block numbers (in order) + block types
-    blocks = list(zip(range(1, n_blocks + 1), block_types))
+    blocks = list(zip(range(1, n_blocks + 1), blocks))
 
     return blocks
 
